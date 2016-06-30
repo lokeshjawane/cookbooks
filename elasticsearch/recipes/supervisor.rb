@@ -7,5 +7,5 @@ service "supervisor" do
 stop_command "service supervisor start"
 	restart_command "service supervisor restart"
 	supports :start => true, :stop => true, :restart => true, :reload => true
-	action [ :enable, :start ]
+	action [ :enable, :nothing ]
 end

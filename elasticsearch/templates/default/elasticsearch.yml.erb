@@ -22,10 +22,16 @@
 #
 node.name: <%= node['hostname']%>
 <% if node['elastic']['master'] == 'True' or node['elastic']['master'] == 'true' %>
-node.master=true
+node.master: true
+node.data: false
+<% end %>
+<% if node['elastic']['client'] == 'True' or node['elastic']['client'] == 'true' %>
+node.client: true
+node.data: false
 <% end %>
 <% if node['elastic']['data'] == 'True' or node['elastic']['data'] == 'true' %>
-node.data=true
+node.data: true
+node.data: false
 <% end %>
 #
 # Add custom attributes to the node:
