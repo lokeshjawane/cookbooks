@@ -34,4 +34,5 @@ execute "Extract tar to /mnt/activemq/apache-activemq-#{node['active']['version'
 	user "activemq"
 	command "tar -xzf /tmp/apache-activemq-#{node['active']['version']}-bin.tar.gz -C /mnt/activemq/apache-activemq-#{node['active']['version']}  --strip-components=1"
 	notifies :restart, 'service[activemq]', :immediate
+	not_if{File.exists?("/mnt/activemq/apache-activemq-#{node['active']['version']}/conf/activemq.xml")}
 end

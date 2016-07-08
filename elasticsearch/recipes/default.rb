@@ -36,12 +36,40 @@ service "elastic" do
 	action :nothing
 #	notifies :start, 'service[supervisor]', :immediately
 end
+
+#fetch list of elastic serach node, if there is no available node then add current instance ip
+elastic_servers = search(:node, 'recipes:"elasticsearch"')
+node_ip=Array.new
+
+
+if elastic_servers.length == 0
+log "lenght is zero!" do
+  level :info
+end
+node_ip << node[:ipaddress]
+
+else
+elastic_servers.each do |elastic_server|
+
+node_ip << elastic_server[:ipaddress]
+elastic_server[:hostname]
+end
+node_ip << node[:ipaddress]
+log "lenght is, #{node_ip}" do
+  level :info
+end
+
+end
+
+
 template "/mnt/elastic/config/elasticsearch.yml" do
-	source "elasticsearch.yml.erb"
-	owner "elastic"
-	group "elastic"
-	action [:create, :touch]
-	mode 777
+    source "elasticsearch.yml.erb"
+    owner "elastic"
+    group "elastic"
+    mode 0644
+    variables(
+        :node_ip_list => node_ip
+    )
 end
 
 include_recipe "elasticsearch::supervisor"

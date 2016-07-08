@@ -1,0 +1,19 @@
+#
+# Cookbook Name:: elasticsearch
+# Recipe:: default
+#
+# Copyright 2016, YOUR_COMPANY_NAME
+#
+# All rights reserved - Do Not Redistribute
+#
+directory "/mnt/elastic" do
+	action :create
+end
+
+remote_file "/tmp/elasticsearch#{node['elastic']['version']}.tar.gz" do
+source "https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.3/elasticsearch-2.3.3.tar.gz"	
+end
+
+execute "extract tar file" do
+	command "tar -xzf /tmp/elasticsearch#{node['elastic']['version']}.tar.gz   --strip-components=1 -C /mnt/elastic"
+end
